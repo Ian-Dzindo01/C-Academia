@@ -63,9 +63,9 @@ namespace habit_tracker
                     case "2":
                         Insert();
                         break;
-                    // case "3":
-                    //     Delete();
-                    //     break;
+                    case "3":
+                        Delete();
+                        break;
                     // case "4":
                     //     Update();
                     //     break;
@@ -161,11 +161,27 @@ namespace habit_tracker
             }
         }
 
-        // private void deleteRecord(int id){
+        private static void Delete(){
+            Console.WriteLine("\nType the ID of the entry you would like to delete: \n");
+            int id = int.Parse(Console.ReadLine());
 
-            
-        // }
+            using(var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var tableCmd = connection.CreateCommand();
+                tableCmd.CommandText = 
+                    $"DELETE FROM making_money where Id = '{id}'";
 
+                int rowCount = tableCmd.ExecuteNonQuery();
+
+                if (rowCount == 0){
+                    Console.WriteLine($"Row {id} does not exist.\n");
+                    Delete();
+                }
+
+                Console.WriteLine($"Record {id} was deleted.");
+                GetUserInput();
+        }
 
     }
 
@@ -176,4 +192,4 @@ namespace habit_tracker
         public int Quantity { get; set; }
 
     }
-}
+}}
