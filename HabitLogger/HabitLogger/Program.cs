@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Data.Sqlite;
@@ -70,7 +70,7 @@ namespace habit_tracker
                         Update();
                         break;
                     default:
-                        Console.WriteLine("\nPlease type a number from 0 to 4.\n");
+                        Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");
                         break;
                 }
             }
@@ -154,10 +154,17 @@ namespace habit_tracker
         internal static string GetDateInput()
         {
             Console.WriteLine("Please insert the date: (Format: dd-mm-yy). 0 to return to the main menu.");
-            // Add format checking here
+
             string input = Console.ReadLine();
 
             if (input == "0") GetUserInput();
+            
+            //Checking if date is valid
+            while(!DateTime.TryParseExact(input, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+            {
+                Console.WriteLine("Invalid. Format: (dd-mm-yy). Type 0 to return to main menu. \n");
+                input = Console.ReadLine();
+            }
 
             return input;
         }
