@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using CodingTracker;
 
 var name = ConfigurationManager.AppSettings["name"];
 var surname = ConfigurationManager.AppSettings["surname"];
