@@ -70,7 +70,7 @@ namespace habit_tracker
                         Update();
                         break;
                     default:
-                        Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");
+                        Console.WriteLine("\nPlease type a number from 0 to 4.\n");
                         break;
                 }
             }
