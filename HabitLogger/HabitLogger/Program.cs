@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Data.Sqlite;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace habit_tracker
 {
@@ -55,9 +57,9 @@ namespace habit_tracker
                         closeApp = true;
                         Environment.Exit(0);
                         break;
-                    // case "1":
-                    //     GetAllRecords();
-                    //     break;
+                    case "1":
+                        GetAllRecords();
+                        break;
                     case "2":
                         Insert();
                         break;
@@ -117,9 +119,61 @@ namespace habit_tracker
 
         private static void GetAllRecords()
         {
+            Console.Clear();
+            using(var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var tableCmd = connection.CreateCommand();
 
+                tableCmd.CommandText =
+                    $"SELECT * FROM making_money";
+
+                List<MakingMoney>  tableData = new();
+
+                SqliteDataReader reader = tableCmd.ExecuteReader();
+
+                if(reader.HasRows)
+                {
+                    while(reader.Read())
+                    {
+                        tableData.Add(new MakingMoney
+                        {
+                            Id = reader.GetInt32(0),
+                            Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", CultureInfo.InvariantCulture),
+                            Quantity = reader.GetInt32(2)
+                        });
+                    }
+                }
+                else
+
+                {
+                    Console.WriteLine("No rows found");
+                }
+
+                connection.Close();
+
+                Console.WriteLine("-------------------------------------------\n");
+                foreach(var w in tableData)
+                {
+                    Console.WriteLine($"{w.Id} - {w.Date.ToString("dd-MMM-yyyy")} - Quantity: {w.Quantity}");
+                }
+                Console.WriteLine("-------------------------------------------\n");
+            }
         }
 
+        // private void deleteRecord(int id){
+
+            
+        // }
+
+
+    }
+
+    class MakingMoney
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public int Quantity { get; set; }
 
     }
 }
