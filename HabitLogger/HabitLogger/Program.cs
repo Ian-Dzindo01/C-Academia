@@ -66,9 +66,9 @@ namespace habit_tracker
                     case "3":
                         Delete();
                         break;
-                    // case "4":
-                    //     Update();
-                    //     break;
+                    case "4":
+                        Update();
+                        break;
                     default:
                         Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");
                         break;
@@ -95,6 +95,61 @@ namespace habit_tracker
                 connection.Close();
             }
         }
+
+        private static void Delete(){
+            int id = GetNumberInput("\nType the ID of the entry you would like to delete: \n");
+
+            using(var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var tableCmd = connection.CreateCommand();
+                tableCmd.CommandText = 
+                    $"DELETE FROM making_money where Id = '{id}'";
+
+                int rowCount = tableCmd.ExecuteNonQuery();
+
+                if (rowCount == 0){
+                    Console.WriteLine($"Row {id} does not exist.\n");
+                    Delete();
+                }
+
+                Console.WriteLine($"Record {id} was deleted.");
+                GetUserInput();
+        }
+
+    }
+
+    private static void Update(){
+        GetAllRecords();
+        int id = GetNumberInput("Type the ID of the field you would like to update: \n");
+
+        Console.Clear();
+        using(var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var tableCmd = connection.CreateCommand();
+                tableCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM making_money WHERE Id = {id})";
+                int checkQuery = Convert.ToInt32(tableCmd.ExecuteScalar());
+
+                if (checkQuery == 0){
+                    Console.WriteLine($"Entry with id {id} does not exist. \n");
+                    connection.Close();
+                    Update();
+                }
+
+                string date =  GetDateInput();
+                int quantity = GetNumberInput("New quantity value for this entry: \n");
+
+                tableCmd.CommandText =
+                    $"UPDATE making_money SET date = '{date}', quantity = {quantity} WHERE Id = {id}";
+
+                tableCmd.ExecuteNonQuery();
+            }
+
+                Console.WriteLine($"Entry with Id: {id} was updated. \n");
+
+                GetUserInput();
+    }
 
         internal static string GetDateInput()
         {
@@ -161,35 +216,10 @@ namespace habit_tracker
             }
         }
 
-        private static void Delete(){
-            Console.WriteLine("\nType the ID of the entry you would like to delete: \n");
-            int id = int.Parse(Console.ReadLine());
-
-            using(var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                var tableCmd = connection.CreateCommand();
-                tableCmd.CommandText = 
-                    $"DELETE FROM making_money where Id = '{id}'";
-
-                int rowCount = tableCmd.ExecuteNonQuery();
-
-                if (rowCount == 0){
-                    Console.WriteLine($"Row {id} does not exist.\n");
-                    Delete();
-                }
-
-                Console.WriteLine($"Record {id} was deleted.");
-                GetUserInput();
-        }
-
-    }
-
     class MakingMoney
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
-
     }
 }}
