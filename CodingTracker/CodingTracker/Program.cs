@@ -183,10 +183,6 @@ namespace CodingTracker
                 string updateQuery = "UPDATE coding_tracker SET StartTime = @StartTime, EndTime = @EndTime, Duration = @Duration WHERE Id = @Id";
                 connection.Execute(updateQuery, new { StartTime = startTime, EndTime = endTime, Duration = duration, Id = id });
                 
-                // connection.Execute(
-                //     "INSERT INTO coding_tracker (StartTime, EndTime, Duration) VALUES (@StartTime, @EndTime, @Duration)",
-                //     new { StartTime = startTime, EndTime = endTime, Duration = duration });
-
                 Console.WriteLine($"Entry with ID: {id} was updated.\n");
 
                 connection.Close();
@@ -195,10 +191,56 @@ namespace CodingTracker
                 GetUserInput();
 
                 }
+        private static void GetAllRecords()
+        {
+            Console.Clear();
+            using(var connection = new SqliteConnection(connectionString))
+            {
+                // connection.Open();
+
+                // string deleteQuery = "DELETE FROM coding_tracker WHERE Id = @Id";
+                // int rowCount = connection.Execute(deleteQuery, new { Id = id });
+                
+                connection.Open();
+                var tableCmd = connection.CreateCommand();
+
+                tableCmd.CommandText =
+                    $"SELECT * FROM making_money";
+
+                List<MakingMoney>  tableData = new();
+
+                SqliteDataReader reader = tableCmd.ExecuteReader();
+
+                if(reader.HasRows)
+                {
+                    while(reader.Read())
+                    {
+                        tableData.Add(new MakingMoney
+                        {
+                            Id = reader.GetInt32(0),
+                            Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", CultureInfo.InvariantCulture),
+                            Quantity = reader.GetInt32(2)
+                        });
+                    }
+                }
+                else
+
+                {
+                    Console.WriteLine("No rows found");
+                }
+
+                connection.Close();
+
+                Console.WriteLine("-------------------------------------------\n");
+                foreach(var w in tableData)
+                {
+                    Console.WriteLine($"{w.Id} - {w.Date.ToString("dd-MMM-yyyy")} - Quantity: {w.Quantity}");
+                }
+                Console.WriteLine("-------------------------------------------\n");
             }
         }
-
-
+    }
+}
 
 
 
