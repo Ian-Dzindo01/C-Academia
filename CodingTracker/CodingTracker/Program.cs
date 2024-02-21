@@ -79,10 +79,10 @@ namespace CodingTracker
                         Insert();
                         break;
                     case "3":
-                        // Delete();
+                        Delete();
                         break;
                     case "4":
-                        // Update();?\
+                        Update();
                         break;
                     default:
                         Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");
@@ -105,6 +105,16 @@ namespace CodingTracker
             return timeInput;
         }
 
+        internal static int GetNumberInput(string message){
+            // Add format checking here
+            Console.WriteLine($"\n{message}\n");
+            int input = int.Parse(Console.ReadLine());
+
+            if (input == 0) GetUserInput(); 
+
+            return input;
+        }
+
         private static void Insert()
         {   
             DateTime startTime = GetTimeInput("start");
@@ -122,8 +132,71 @@ namespace CodingTracker
                 connection.Close();
             }
         }
-    }       
-}
+
+        private static void Delete()
+        {
+            int id = GetNumberInput("\nType the ID of the entry you would like to delete: ");
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string deleteQuery = "DELETE FROM coding_tracker WHERE Id = @Id";
+                int rowCount = connection.Execute(deleteQuery, new { Id = id });
+
+                if (rowCount == 0){
+                    Console.WriteLine($"Row {id} does not exist.\n");
+                    Delete();}
+                else
+                    Console.WriteLine($"Record {id} was deleted.");
+
+                connection.Close();
+            }
+
+            GetUserInput();
+        }
+
+        private static void Update()
+        {
+            // GetAllRecords();
+
+            int id = GetNumberInput("\nType the ID of the field you would like to update: ");
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM coding_tracker WHERE Id = @Id";
+                int rowCount = connection.ExecuteScalar<int>(checkQuery, new { Id = id });
+
+                if (rowCount == 0)
+                {
+                    Console.WriteLine($"Entry with ID {id} does not exist.\n");
+                    connection.Close();
+                    Update();
+                }
+
+                DateTime startTime = GetTimeInput("start");
+                DateTime endTime = GetTimeInput("end");
+                TimeSpan duration = endTime - startTime;
+
+                string updateQuery = "UPDATE coding_tracker SET StartTime = @StartTime, EndTime = @EndTime, Duration = @Duration WHERE Id = @Id";
+                connection.Execute(updateQuery, new { StartTime = startTime, EndTime = endTime, Duration = duration, Id = id });
+                
+                // connection.Execute(
+                //     "INSERT INTO coding_tracker (StartTime, EndTime, Duration) VALUES (@StartTime, @EndTime, @Duration)",
+                //     new { StartTime = startTime, EndTime = endTime, Duration = duration });
+
+                Console.WriteLine($"Entry with ID: {id} was updated.\n");
+
+                connection.Close();
+                }
+
+                GetUserInput();
+
+                }
+            }
+        }
 
 
 
