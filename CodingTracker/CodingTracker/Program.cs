@@ -13,17 +13,17 @@ namespace CodingTracker
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public TimeSpan duration;
+        public string duration;
 
         // Constructor for initializing a CodingSession
-        public CodingSession(int id, DateTime startTime, DateTime endTime)
-        {
-            Id = id;
-            StartTime = startTime;
-            EndTime = endTime;
-            duration = EndTime - StartTime;
-        }
+    //     public CodingSession(int id, DateTime startTime, DateTime endTime)
+    //     {
+    //         Id = id;
+    //         StartTime = startTime;
+    //         EndTime = endTime;
+    //         duration = EndTime - StartTime;
     }
+    
     public class Program
     {
         static string connectionString = ConfigurationManager.AppSettings["connectionString"];
@@ -73,7 +73,7 @@ namespace CodingTracker
                         Environment.Exit(0);
                         break;
                     case "1":
-                        // GetAllRecords();
+                        GetAllRecords();
                         break;
                     case "2":
                         Insert();
@@ -120,6 +120,8 @@ namespace CodingTracker
             DateTime startTime = GetTimeInput("start");
             DateTime endTime = GetTimeInput("end");
             TimeSpan duration = endTime - startTime;
+            string formattedDuration = duration.ToString(@"hh\:mm");
+
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -127,7 +129,7 @@ namespace CodingTracker
 
                 connection.Execute(
                     "INSERT INTO coding_tracker (StartTime, EndTime, Duration) VALUES (@StartTime, @EndTime, @Duration)",
-                    new { StartTime = startTime, EndTime = endTime, Duration = duration });
+                    new { StartTime = startTime, EndTime = endTime, Duration = formattedDuration });
 
                 connection.Close();
             }
@@ -179,9 +181,11 @@ namespace CodingTracker
                 DateTime startTime = GetTimeInput("start");
                 DateTime endTime = GetTimeInput("end");
                 TimeSpan duration = endTime - startTime;
+                string formattedDuration = duration.ToString(@"hh\:mm");
+
 
                 string updateQuery = "UPDATE coding_tracker SET StartTime = @StartTime, EndTime = @EndTime, Duration = @Duration WHERE Id = @Id";
-                connection.Execute(updateQuery, new { StartTime = startTime, EndTime = endTime, Duration = duration, Id = id });
+                connection.Execute(updateQuery, new { StartTime = startTime, EndTime = endTime, Duration = formattedDuration, Id = id });
                 
                 Console.WriteLine($"Entry with ID: {id} was updated.\n");
 
@@ -196,61 +200,19 @@ namespace CodingTracker
             Console.Clear();
             using(var connection = new SqliteConnection(connectionString))
             {
-                // connection.Open();
-
-                // string deleteQuery = "DELETE FROM coding_tracker WHERE Id = @Id";
-                // int rowCount = connection.Execute(deleteQuery, new { Id = id });
-                
                 connection.Open();
-                var tableCmd = connection.CreateCommand();
 
-                tableCmd.CommandText =
-                    $"SELECT * FROM making_money";
-
-                List<MakingMoney>  tableData = new();
-
-                SqliteDataReader reader = tableCmd.ExecuteReader();
-
-                if(reader.HasRows)
-                {
-                    while(reader.Read())
-                    {
-                        tableData.Add(new MakingMoney
-                        {
-                            Id = reader.GetInt32(0),
-                            Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", CultureInfo.InvariantCulture),
-                            Quantity = reader.GetInt32(2)
-                        });
-                    }
-                }
-                else
-
-                {
-                    Console.WriteLine("No rows found");
-                }
+                List<CodingSession> tableData = connection.Query<CodingSession>("SELECT * FROM coding_tracker").ToList();
 
                 connection.Close();
 
                 Console.WriteLine("-------------------------------------------\n");
                 foreach(var w in tableData)
                 {
-                    Console.WriteLine($"{w.Id} - {w.Date.ToString("dd-MMM-yyyy")} - Quantity: {w.Quantity}");
+                    Console.WriteLine($"Id: {w.Id} StartTime: {w.StartTime} EndTime {w.EndTime} Duration: {w.duration}");
                 }
                 Console.WriteLine("-------------------------------------------\n");
             }
         }
     }
 }
-
-
-
-// DateTime now = DateTime.Now;
-// Console.WriteLine("Write your time");
-// string start = Console.ReadLine();
-// string end = Console.ReadLine();
-
-
-// DateTime startTime = DateTime.ParseExact(start, "HH:mm", CultureInfo.InvariantCulture);
-// DateTime endTime = DateTime.ParseExact(end, "HH:mm", CultureInfo.InvariantCulture);
-
-// Console.WriteLine(endTime - startTime);
