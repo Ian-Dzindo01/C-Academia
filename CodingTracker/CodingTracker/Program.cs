@@ -1,29 +1,12 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Globalization;
-// using CodingTracker;
-using System.Data;
 using Microsoft.Data.Sqlite;
 using Dapper;
+using Spectre.Console;
+
 
 namespace CodingTracker
-{
-    public class CodingSession
-    {
-        public int Id { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public string duration;
-
-        // Constructor for initializing a CodingSession
-    //     public CodingSession(int id, DateTime startTime, DateTime endTime)
-    //     {
-    //         Id = id;
-    //         StartTime = startTime;
-    //         EndTime = endTime;
-    //         duration = EndTime - StartTime;
-    }
-    
+{   
     public class Program
     {
         static string connectionString = ConfigurationManager.AppSettings["connectionString"];
@@ -160,7 +143,7 @@ namespace CodingTracker
 
         private static void Update()
         {
-            // GetAllRecords();
+            GetAllRecords();
 
             int id = GetNumberInput("\nType the ID of the field you would like to update: ");
 
@@ -207,9 +190,11 @@ namespace CodingTracker
                 connection.Close();
 
                 Console.WriteLine("-------------------------------------------\n");
-                foreach(var w in tableData)
+                foreach (var w in tableData)
                 {
-                    Console.WriteLine($"Id: {w.Id} StartTime: {w.StartTime} EndTime {w.EndTime} Duration: {w.duration}");
+                    TimeSpan duration = w.EndTime - w.StartTime;
+                    
+                    AnsiConsole.MarkupLine($"[bold]Id:[/] {w.Id} [bold]StartTime:[/] {w.StartTime} [bold]EndTime:[/] {w.EndTime} [bold]Duration:[/] {duration:hh\\:mm}");
                 }
                 Console.WriteLine("-------------------------------------------\n");
             }
