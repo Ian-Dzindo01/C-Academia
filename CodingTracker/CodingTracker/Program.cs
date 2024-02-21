@@ -76,7 +76,7 @@ namespace CodingTracker
                         // GetAllRecords();
                         break;
                     case "2":
-                        // Insert();
+                        Insert();
                         break;
                     case "3":
                         // Delete();
@@ -111,20 +111,18 @@ namespace CodingTracker
             DateTime endTime = GetTimeInput("end");
             TimeSpan duration = endTime - startTime;
 
-
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
                 connection.Execute(
-                    "INSERT INTO coding_tracker (StartTime, EndTime, duration) VALUES (@startTime, @endTime, @duration)",
-                    new { StartTime = startTime, EndTime = endTime, Duration=duration});
+                    "INSERT INTO coding_tracker (StartTime, EndTime, Duration) VALUES (@StartTime, @EndTime, @Duration)",
+                    new { StartTime = startTime, EndTime = endTime, Duration = duration });
 
                 connection.Close();
             }
         }
-}
-       
+    }       
 }
 
 
