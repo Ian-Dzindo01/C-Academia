@@ -1,3 +1,1 @@
-Start time end time of session
-Assign Id to each entry
-Duration of session - to be automatically calculated
+Use SpectreConsole to pretty print the results.
