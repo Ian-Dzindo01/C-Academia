@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using Dapper;
 
 namespace Flashcards
@@ -12,7 +12,7 @@ namespace Flashcards
         static void Main(string[] args)
         {
         // Create a connection
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
@@ -31,24 +31,8 @@ namespace Flashcards
 
                 connection.Close();
             }
+            
+            InputHelper.GetUserInput();
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-//         Console.WriteLine("------------------------------------");
-//         Console.WriteLine("Manage Stacks \n");
-//         Console.WriteLine("Manage Flashcards \n");
-//         Console.WriteLine("Study \n");
-//         Console.WriteLine("View Study Session Data \n");
-//         Console.WriteLine("------------------------------------");
-//     }
-// }
