@@ -1,31 +1,102 @@
+using System.Configuration;
+using Dapper;
+using Microsoft.Data.Sqlite;
+using Microsoft.VisualBasic.FileIO;
+
+
 namespace Flashcards;
 
-class Card(string question, string answer, string stackName, int id = 0)
+class Card(string question, string answer, string stackName)
 {
+    static string connectionString = ConfigurationManager.AppSettings["connectionString"];
     string question = question;
     string answer = answer;
-    string stackName = stackName;
-    public int id = id;
-    
-    public static Card FromCsv(string csv)
-    {
-        string[] data = csv.Split(',');
-        Card card = new(data[0], data[1], data[2]);
-        return card;
+    string stackId = stackName;
+
+    public static void Add()
+    {   
+        Console.WriteLine("Original word: ");
+        string question = Console.ReadLine();
+
+        Console.WriteLine("Word translation: ");
+        string answer = Console.ReadLine();
+
+        Console.WriteLine("Id of the stack to which this entry belongs to: ");
+
+        string stackId = Console.ReadLine();
+
+        using (var connection = new SqliteConnection(connectionString))
+        {
+            string insertCommand = "INSERT INTO card_table (question, answer, stackId) VALUES (@Question, @Answer, @StackId)";
+
+            connection.Open();
+
+            connection.Execute(insertCommand, new { Question = question, Answer = answer, StackId = stackId });
+
+            connection.Close();
+        }
+
+        Console.WriteLine("Successfully inserted new Flashcard. \n");
+
+        InputHelper.GetUserInput();
     }
-    static void Add()
-    {
 
+    public static void Delete()
+    {
+        int id = InputHelper.GetNumberInput("\nType the ID of the entry you would like to delete: ");
+
+        using (var connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+
+            string deleteQuery = "DELETE FROM card_table WHERE Id = @Id";
+
+            int rowCount = connection.Execute(deleteQuery, new { Id = id });
+
+            if (rowCount == 0){
+                Console.WriteLine($"Row {id} does not exist.\n");
+                Delete();}
+            else
+                Console.WriteLine($"Record {id} was deleted.");
+
+            connection.Close();
+        }
+
+        InputHelper.GetUserInput();
     }
 
-    static void Delete()
-    {
+    public static void Update()
+        {   // Make this
+            // Output.GetAllRecords();
 
-    }
+            int id = InputHelper.GetNumberInput("\nType the ID of the field you would like to update: ");
 
-    static void Update()
-    {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
 
-    }
+                string checkQuery = "SELECT COUNT(*) FROM card_table WHERE Id = @Id";
 
+                int rowCount = connection.ExecuteScalar<int>(checkQuery, new { Id = id });
+
+                if (rowCount == 0)
+                {
+                    Console.WriteLine($"Entry with ID {id} does not exist.\n");
+                    connection.Close();
+                    Update();
+                }
+
+                Console.WriteLine("Type the new name of this stack: \n");
+                string name = Console.ReadLine();
+
+                string updateQuery = "UPDATE stack_table SET Name = @Name WHERE Id = @Id";
+                connection.Execute(updateQuery, new { Name = name, Id = id });
+                
+                Console.WriteLine($"Entry with ID {id} was updated.\n");
+
+                connection.Close();
+                }
+
+                InputHelper.GetUserInput();
+        }
 }

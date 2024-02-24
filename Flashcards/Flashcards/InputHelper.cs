@@ -32,7 +32,6 @@ class InputHelper
         }
 
     }
-
     static public void ManageStacks()
     {   Console.WriteLine("\n \n");
         Console.WriteLine("1: Add new Stack");
@@ -60,28 +59,28 @@ class InputHelper
 
     static public void ManageFlashcards()
     {
-        Console.WriteLine("1: Add new Flashcard \n");
-        Console.WriteLine("2: Update Existing Flashcard \n");
-        Console.WriteLine("3: Delete a Flashcard \n");
-        Console.WriteLine("0: Back to Main Menu \n");
+        Console.WriteLine("1: Add new Flashcard");
+        Console.WriteLine("2: Update Existing Flashcard");
+        Console.WriteLine("3: Delete a Flashcard");
+        Console.WriteLine("0: Back to Main Menu");
 
         string choice = Console.ReadLine();
 
         switch(choice)
         {
             case "1":
+                Card.Add();
                 break;
             case "2":
                 break;
             case "3":
+                Card.Delete();
                 break;
             case "0":
                 GetUserInput();
                 break;
         }
-
     }
-
     public static int GetNumberInput(string message){
         // Add format checking here
         Console.WriteLine($"\n{message}\n");

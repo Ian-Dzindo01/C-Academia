@@ -15,21 +15,21 @@ class Initializer
             connection.Open();
 
             connection.Execute(@"
-                CREATE TABLE IF NOT EXISTS stack_table (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT
-                );
+            CREATE TABLE IF NOT EXISTS stack_table (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT
+            );
 
-                CREATE TABLE IF NOT EXISTS card_table (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    question TEXT,
-                    answer TEXT,
-                    name TEXT,
-
-                );");
+            CREATE TABLE IF NOT EXISTS card_table (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                question TEXT,
+                answer TEXT,
+                stackId INTEGER,  
+                FOREIGN KEY (stackId) REFERENCES stack_table(Id) ON DELETE CASCADE
+            );");
 
             connection.Close();
-
+            
         }
     }
 }

@@ -2,6 +2,8 @@ using System;
 using System.Configuration;
 using Microsoft.Data.Sqlite;
 using Dapper;
+using Microsoft.VisualBasic.FileIO;
+
 
 namespace Flashcards;
 
@@ -11,12 +13,29 @@ class Stack(string name)
 
     static string connectionString = ConfigurationManager.AppSettings["connectionString"];
     
-    public static Stack FromCsv(string csv)
-    {
-        string[] data = csv.Split(',');
-        Stack stack = new(data[0]);
-        return stack;
-    }
+    // public static void FromCsv(string csv)
+    // {   
+    //     using (var connection = new SqliteConnection(connectionString))
+    //     {
+    //         string filePath = "path/to/your/file.csv"; // Replace with the actual path to your CSV file
+
+    //         List<string> names = ReadCsvFile(filePath);
+
+    //         // Display the names
+    //         foreach (string name in names)
+    //         {
+    //             Console.WriteLine(name);
+    //         }
+
+    //         string insertCommand = "INSERT INTO stack_table (name) VALUES (@Name)";
+
+    //         connection.Open();
+
+    //         connection.Execute(insertCommand, new { Name = name });
+
+    //         connection.Close();
+    //     }
+    // }
 
     public static void Add()
     {   

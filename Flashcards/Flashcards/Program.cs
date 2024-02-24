@@ -1,12 +1,7 @@
-﻿using System;
-using System.Configuration;
-using Dapper;
-
-namespace Flashcards
+﻿namespace Flashcards
 {   
     public class Program
     {
-        // Create database
         static void Main(string[] args)
         {
             Initializer.Init();

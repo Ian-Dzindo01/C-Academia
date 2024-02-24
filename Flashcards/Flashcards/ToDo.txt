@@ -1,2 +1,4 @@
 - Migrate to SQL Server.
 - Id's need to numbered correctly. Renumber when one entry is deleted.
+- Add fromCSV read in ability.
+- Maybe merge Stack and Flashcard update and delete methods.
