@@ -16,14 +16,14 @@ class Card(string question, string answer, string stackName)
     public static void Add()
     {   
         Console.WriteLine("Original word: ");
-        string question = Console.ReadLine();
+        string? question = Console.ReadLine();
 
         Console.WriteLine("Word translation: ");
-        string answer = Console.ReadLine();
+        string? answer = Console.ReadLine();
 
         Console.WriteLine("Id of the stack to which this entry belongs to: ");
 
-        string stackId = Console.ReadLine();
+        string? stackId = Console.ReadLine();
 
         using (var connection = new SqliteConnection(connectionString))
         {
@@ -69,7 +69,7 @@ class Card(string question, string answer, string stackName)
         {   // Make this
             // Output.GetAllRecords();
 
-            int id = InputHelper.GetNumberInput("\nType the ID of the field you would like to update: ");
+            int id = InputHelper.GetNumberInput("\nType the ID of the card you would like to update: ");
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -86,15 +86,23 @@ class Card(string question, string answer, string stackName)
                     Update();
                 }
 
-                Console.WriteLine("Type the new name of this stack: \n");
-                string name = Console.ReadLine();
+                Console.WriteLine("New question: \n");
+                string? question = Console.ReadLine();
 
-                string updateQuery = "UPDATE stack_table SET Name = @Name WHERE Id = @Id";
-                connection.Execute(updateQuery, new { Name = name, Id = id });
+                Console.WriteLine("New translation: \n");
+                string? answer = Console.ReadLine();
+
+                Console.WriteLine("New Stack Id: \n");
+                int stackId = int.Parse(Console.ReadLine());
+
+                string updateQuery = "UPDATE card_table SET Question = @Question, Answer = @Answer, StackId = @StackId WHERE Id = @Id";
+
+                connection.Execute(updateQuery, new { Question = question, Answer = answer, StackId = stackId, Id = id });
                 
                 Console.WriteLine($"Entry with ID {id} was updated.\n");
 
                 connection.Close();
+
                 }
 
                 InputHelper.GetUserInput();

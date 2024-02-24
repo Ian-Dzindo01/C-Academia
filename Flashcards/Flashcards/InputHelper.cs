@@ -11,7 +11,7 @@ class InputHelper
         Console.WriteLine("2: Manage Flashcards");
         Console.WriteLine("3: Study");
         Console.WriteLine("4: View Study Session Data");
-        string choice = Console.ReadLine();
+        string? choice = Console.ReadLine();
 
         switch (choice)
         {
@@ -38,7 +38,7 @@ class InputHelper
         Console.WriteLine("2: Update Existing Stack");
         Console.WriteLine("3: Delete a Stack");
         Console.WriteLine("0: Back to Main Menu");
-        string choice = Console.ReadLine();
+        string? choice = Console.ReadLine();
 
         switch(choice)
         {
@@ -64,7 +64,7 @@ class InputHelper
         Console.WriteLine("3: Delete a Flashcard");
         Console.WriteLine("0: Back to Main Menu");
 
-        string choice = Console.ReadLine();
+        string? choice = Console.ReadLine();
 
         switch(choice)
         {
@@ -72,6 +72,7 @@ class InputHelper
                 Card.Add();
                 break;
             case "2":
+                Card.Update();
                 break;
             case "3":
                 Card.Delete();
