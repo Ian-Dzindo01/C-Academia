@@ -17,6 +17,7 @@ class Stack(string name)
         Stack stack = new(data[0]);
         return stack;
     }
+
     public static void Add()
     {   
         Console.WriteLine("Name of stack you would like to add: ");
@@ -31,10 +32,10 @@ class Stack(string name)
             connection.Execute(insertCommand, new { Name = name });
 
             connection.Close();
-
-            Console.WriteLine("Successfully inserted new Stack. \n");
-
         }
+
+        Console.WriteLine("Successfully inserted new Stack. \n");
+        InputHelper.GetUserInput();
     }
 
     public static void Delete()
@@ -61,38 +62,39 @@ class Stack(string name)
         InputHelper.GetUserInput();
     }
 
-    // public static void Update()
-    //     {   // Make this
-    //         // Output.GetAllRecords();
+    public static void Update()
+        {   // Make this
+            // Output.GetAllRecords();
 
-    //         int id = InputHelper.GetNumberInput("\nType the ID of the field you would like to update: ");
+            int id = InputHelper.GetNumberInput("\nType the ID of the field you would like to update: ");
 
-    //         using (var connection = new SqliteConnection(connectionString))
-    //         {
-    //             connection.Open();
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
 
-    //             string checkQuery = "SELECT COUNT(*) FROM stack_table WHERE Id = @Id";
+                string checkQuery = "SELECT COUNT(*) FROM stack_table WHERE Id = @Id";
 
-    //             int rowCount = connection.ExecuteScalar<int>(checkQuery, new { Id = id });
+                int rowCount = connection.ExecuteScalar<int>(checkQuery, new { Id = id });
 
-    //             if (rowCount == 0)
-    //             {
-    //                 Console.WriteLine($"Entry with ID {id} does not exist.\n");
-    //                 connection.Close();
-    //                 Update();
-    //             }
+                if (rowCount == 0)
+                {
+                    Console.WriteLine($"Entry with ID {id} does not exist.\n");
+                    connection.Close();
+                    Update();
+                }
 
+                Console.WriteLine("Type the new name of this stack: \n");
+                string name = Console.ReadLine();
 
-    //             string updateQuery = "UPDATE coding_tracker SET StartTime = @StartTime, EndTime = @EndTime, Duration = @Duration WHERE Id = @Id";
-    //             connection.Execute(updateQuery, new { StartTime = startTime, EndTime = endTime, Duration = formattedDuration, Id = id });
+                string updateQuery = "UPDATE stack_table SET Name = @Name WHERE Id = @Id";
+                connection.Execute(updateQuery, new { Name = name, Id = id });
                 
-    //             Console.WriteLine($"Entry with ID: {id} was updated.\n");
+                Console.WriteLine($"Entry with ID {id} was updated.\n");
 
-    //             connection.Close();
-    //             }
+                connection.Close();
+                }
 
-    //             InputHelper.GetUserInput();
-    //             }
-    //    }
+                InputHelper.GetUserInput();
+        }
 }
 

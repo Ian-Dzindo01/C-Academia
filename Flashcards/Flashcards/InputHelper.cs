@@ -47,6 +47,7 @@ class InputHelper
                 Stack.Add();
                 break;
             case "2":
+                Stack.Update();
                 break;
             case "3":
                 Stack.Delete();

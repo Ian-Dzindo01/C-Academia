@@ -1,2 +1,2 @@
-Migrate to SQL Server.
-You do not want to store the list of Flashcards inside of the stack class. Better to have foreign keys linking the 2 tables.
+- Migrate to SQL Server.
+- Id's need to numbered correctly.
