@@ -1,2 +1,2 @@
 - Migrate to SQL Server.
-- Id's need to numbered correctly.
+- Id's need to numbered correctly. Renumber when one entry is deleted.
