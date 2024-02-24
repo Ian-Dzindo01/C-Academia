@@ -7,10 +7,10 @@ class InputHelper
     static public void GetUserInput()
     {
         Console.WriteLine("------------------------------------");
-        Console.WriteLine("Manage Stacks \n");
-        Console.WriteLine("Manage Flashcards \n");
-        Console.WriteLine("Study \n");
-        Console.WriteLine("View Study Session Data \n");
+        Console.WriteLine("1: Manage Stacks");
+        Console.WriteLine("2: Manage Flashcards");
+        Console.WriteLine("3: Study");
+        Console.WriteLine("4: View Study Session Data");
         string choice = Console.ReadLine();
 
         switch (choice)
@@ -34,20 +34,22 @@ class InputHelper
     }
 
     static public void ManageStacks()
-    {
-        Console.WriteLine("1: Add new Stack \n");
-        Console.WriteLine("2: Update Existing Stack \n");
-        Console.WriteLine("3: Delete a Stack \n");
-        Console.WriteLine("0: Back to Main Menu \n");
+    {   Console.WriteLine("\n \n");
+        Console.WriteLine("1: Add new Stack");
+        Console.WriteLine("2: Update Existing Stack");
+        Console.WriteLine("3: Delete a Stack");
+        Console.WriteLine("0: Back to Main Menu");
         string choice = Console.ReadLine();
 
         switch(choice)
         {
             case "1":
+                Stack.Add();
                 break;
             case "2":
                 break;
             case "3":
+                Stack.Delete();
                 break;
             case "0":
                 GetUserInput();
@@ -61,7 +63,7 @@ class InputHelper
         Console.WriteLine("2: Update Existing Flashcard \n");
         Console.WriteLine("3: Delete a Flashcard \n");
         Console.WriteLine("0: Back to Main Menu \n");
-        
+
         string choice = Console.ReadLine();
 
         switch(choice)
