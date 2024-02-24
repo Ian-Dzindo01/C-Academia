@@ -13,29 +13,43 @@ class Stack(string name)
 
     static string connectionString = ConfigurationManager.AppSettings["connectionString"];
     
-    // public static void FromCsv(string csv)
-    // {   
-    //     using (var connection = new SqliteConnection(connectionString))
-    //     {
-    //         string filePath = "path/to/your/file.csv"; // Replace with the actual path to your CSV file
+    public static void ReadInFromCsv(string filePath)
+    {
+        List<string> names = new List<string>();
 
-    //         List<string> names = ReadCsvFile(filePath);
+        using (TextFieldParser parser = new TextFieldParser(filePath))
+        {
+            parser.TextFieldType = FieldType.Delimited;
+            parser.SetDelimiters(",");
 
-    //         // Display the names
-    //         foreach (string name in names)
-    //         {
-    //             Console.WriteLine(name);
-    //         }
+            while (!parser.EndOfData)
+            {
+                // Read current line fields, assuming there is only one field per line
+                string[] fields = parser.ReadFields();
 
-    //         string insertCommand = "INSERT INTO stack_table (name) VALUES (@Name)";
+                if (fields != null && fields.Length > 0)
+                {
+                    names.Add(fields[0]);
+                }
+            }
+        }
 
-    //         connection.Open();
+        using (var connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            // Display the names
+            foreach (string name in names)
+            {
+                string insertCommand = "INSERT INTO stack_table (name) VALUES (@Name)";
+                connection.Execute(insertCommand, new { Name = name });
+                connection.Close();
+            }
+        }
 
-    //         connection.Execute(insertCommand, new { Name = name });
+        Console.WriteLine("Data read in successfully. Moving back to Main Page. \n");
+        InputHelper.GetUserInput();
 
-    //         connection.Close();
-    //     }
-    // }
+    }
 
     public static void Add()
     {   
@@ -116,4 +130,3 @@ class Stack(string name)
                 InputHelper.GetUserInput();
         }
 }
-

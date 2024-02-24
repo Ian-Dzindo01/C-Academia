@@ -96,11 +96,9 @@ class Card(string question, string answer, string stackName)
                 int stackId = int.Parse(Console.ReadLine());
 
                 string updateQuery = "UPDATE card_table SET Question = @Question, Answer = @Answer, StackId = @StackId WHERE Id = @Id";
-
                 connection.Execute(updateQuery, new { Question = question, Answer = answer, StackId = stackId, Id = id });
                 
                 Console.WriteLine($"Entry with ID {id} was updated.\n");
-
                 connection.Close();
 
                 }
