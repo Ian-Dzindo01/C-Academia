@@ -15,6 +15,8 @@ class StudySession()
     {
         Console.WriteLine("Which language do you want to practice?");
 
+        Random rnd = new Random();
+
         using (var connection = new SqliteConnection(connectionString))
         {
             connection.Open();
@@ -37,10 +39,17 @@ class StudySession()
             string idquery = @"SELECT question, answer from card_table WHERE stackId = @intChoice"; 
 
             var result = connection.Query(idquery, new { intChoice }).ToList();
+            string response;
 
-            foreach (var row in result)
+            for(int i = 1; i <= result.Count; i++)
             {
-                Console.WriteLine($"Question: {row.question}, Answer: {row.answer}");
+                var obj = result[rnd.Next(1, result.Count)];
+                Console.WriteLine($"{obj.question} translates to: ");
+                response = Console.ReadLine();
+                if (response != obj.answer)
+                    Console.WriteLine("Wrong answer");
+                else
+                    Console.WriteLine("Correct");
             }
         }
     }
