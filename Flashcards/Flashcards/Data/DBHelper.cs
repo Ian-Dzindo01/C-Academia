@@ -24,8 +24,8 @@ class Initializer
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 question TEXT,
                 answer TEXT,
-                stackId INTEGER
-                -- FOREIGN KEY (stackId) REFERENCES stack_table(Id) ON DELETE CASCADE
+                stackId INTEGER,
+                FOREIGN KEY (stackId) REFERENCES stack_table(Id) ON DELETE CASCADE
             );");
 
             connection.Close();

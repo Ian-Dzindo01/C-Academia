@@ -45,7 +45,7 @@ class Stack(string name)
         }
 
         Console.WriteLine("Stack data read in successfully. Moving back to Main Page. \n");
-        InputHelper.GetUserInput();
+        // InputHelper.GetUserInput();
 
     }
 

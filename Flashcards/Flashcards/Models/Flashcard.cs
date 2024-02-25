@@ -36,9 +36,6 @@ class Card(string question, string answer, string stackName)
                 }
             }
         }
-
-        Console.WriteLine("Reached here!");
-
         using (var connection = new SqliteConnection(connectionString))
         {
             connection.Open();
@@ -56,7 +53,7 @@ class Card(string question, string answer, string stackName)
         }
 
         Console.WriteLine("Card data read in successfully. Moving back to Main Page. \n");
-        // InputHelper.GetUserInput();
+        InputHelper.GetUserInput();
     }
 
     public static void Add()
