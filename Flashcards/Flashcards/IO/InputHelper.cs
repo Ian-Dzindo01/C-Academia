@@ -22,8 +22,9 @@ class InputHelper
             case "2":
                 ManageFlashcards();
                 break;
-            // case "3":
-            //     break;
+            case "3":
+                StudySession.Session();
+                break;
             // case "4":
             //     break;
             case "5":
