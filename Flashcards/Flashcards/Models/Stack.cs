@@ -4,13 +4,11 @@ using Microsoft.Data.Sqlite;
 using Dapper;
 using Microsoft.VisualBasic.FileIO;
 
-
 namespace Flashcards;
 
 class Stack(string name)
 {
     string name = name;
-
     static string connectionString = ConfigurationManager.AppSettings["connectionString"];
     
     public static void ReadInFromCsv(string filePath)
@@ -46,7 +44,7 @@ class Stack(string name)
             }
         }
 
-        Console.WriteLine("Data read in successfully. Moving back to Main Page. \n");
+        Console.WriteLine("Stack data read in successfully. Moving back to Main Page. \n");
         InputHelper.GetUserInput();
 
     }

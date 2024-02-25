@@ -27,8 +27,8 @@ class InputHelper
             // case "4":
             //     break;
             case "5":
+                Card.ReadInFromCsv(ConfigurationManager.AppSettings["cardCsv"]);
                 Stack.ReadInFromCsv(ConfigurationManager.AppSettings["stackCsv"]);
-                // Card.ReadInFromCsv(ConfigurationManager.AppSettings["stackCsv"]);
                 break;
             default:
                 Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");

@@ -12,6 +12,52 @@ class Card(string question, string answer, string stackName)
     string question = question;
     string answer = answer;
     string stackId = stackName;
+    public static void ReadInFromCsv(string filePath)
+    {
+        List<string> questions = new List<string>();
+        List<string> answers = new List<string>();
+        List<int> ids = new List<int>();
+
+        using (TextFieldParser parser = new TextFieldParser(filePath))
+        {
+            parser.TextFieldType = FieldType.Delimited;
+            parser.SetDelimiters(",");
+
+            while (!parser.EndOfData)
+            {
+                // Read current line fields, assuming there is only one field per line
+                string[] fields = parser.ReadFields();
+
+                if (fields != null && fields.Length > 0)
+                {
+                    questions.Add(fields[0]);
+                    answers.Add(fields[1]);
+                    ids.Add(int.Parse(fields[2]));
+                }
+            }
+        }
+
+        Console.WriteLine("Reached here!");
+
+        using (var connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+
+            string insertCommand = @"
+                INSERT INTO card_table (question, answer, stackId) 
+                VALUES (@Question, @Answer, @StackId)";
+            
+            var cardEntries = questions.Select((q, index) => new { Question = q, Answer = answers[index], StackId = ids[index] });
+
+            // Use Dapper's Execute method to insert all names in bulk
+            connection.Execute(insertCommand, cardEntries);
+
+            connection.Close();
+        }
+
+        Console.WriteLine("Card data read in successfully. Moving back to Main Page. \n");
+        // InputHelper.GetUserInput();
+    }
 
     public static void Add()
     {   
