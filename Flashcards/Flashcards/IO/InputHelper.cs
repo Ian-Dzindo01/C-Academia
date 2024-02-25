@@ -33,7 +33,6 @@ class InputHelper
             default:
                 Console.WriteLine("\nInvalid Command. Please type a number from 0 to 4.\n");
                 break;
-                
         }
 
     }

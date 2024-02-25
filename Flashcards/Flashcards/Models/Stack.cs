@@ -46,9 +46,7 @@ class Stack(string name)
 
         Console.WriteLine("Stack data read in successfully. Moving back to Main Page. \n");
         // InputHelper.GetUserInput();
-
     }
-
     public static void Add()
     {   
         Console.WriteLine("Name of stack you would like to add: ");
@@ -85,7 +83,7 @@ class Stack(string name)
                 Console.WriteLine($"Row {id} does not exist.\n");
                 Delete();}
             else
-                Console.WriteLine($"Record {id} was deleted.");
+                Console.WriteLine($"Stack {id} was deleted.");
 
             connection.Close();
         }
@@ -124,7 +122,6 @@ class Stack(string name)
 
                 connection.Close();
                 }
-
                 InputHelper.GetUserInput();
         }
 }

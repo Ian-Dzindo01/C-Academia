@@ -3,7 +3,6 @@ using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualBasic.FileIO;
 
-
 namespace Flashcards;
 
 class Card(string question, string answer, string stackName)
