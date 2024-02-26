@@ -37,7 +37,7 @@ class Games()
 
             var keyValuePairs = names.Zip(ids, (key, value) => new { Key = key, Value = value });
             Dictionary<string, string> languages = keyValuePairs.ToDictionary(pair => pair.Key, pair => pair.Value);
-            
+
             foreach (string name in names)
                 Console.WriteLine(name);
             
@@ -69,8 +69,16 @@ class Games()
                     Console.WriteLine("Correct");
                 }
             }
+
             Console.WriteLine($"You had {session.correct} correct answers and {session.wrong} wrong answers.");
-            Console.WriteLine("This session will be store in the database.");
+            Console.WriteLine("This session will be stored in the database.");
+
+            string insertCommand = @"INSERT INTO session_table (correct, wrong, stackId) VALUES (@Correct, @Wrong, @StackId)";
+
+            connection.Execute(insertCommand, new { Correct = session.correct, Wrong = session.wrong, StackId = intChoice });
+
+            connection.Close();
         }
+        InputHelper.GetUserInput();
     }
 }

@@ -26,7 +26,15 @@ class Initializer
                 answer TEXT,
                 stackId INTEGER,
                 FOREIGN KEY (stackId) REFERENCES stack_table(Id) ON DELETE CASCADE
-            );");
+            );
+            
+            CREATE TABLE IF NOT EXISTS session_table (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                correct INTEGER,
+                wrong INTEGER,
+                stackId INTEGER,
+                FOREIGN KEY (stackId) REFERENCES stack_table(Id) ON DELETE CASCADE
+            )");
 
             connection.Close();
             

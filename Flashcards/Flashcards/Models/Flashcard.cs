@@ -69,12 +69,10 @@ class Card(string question, string answer, string stackName)
 
         using (var connection = new SqliteConnection(connectionString))
         {
-            string insertCommand = "INSERT INTO card_table (question, answer, stackId) VALUES (@Question, @Answer, @StackId)";
+            string insertCommand = @"INSERT INTO card_table (question, answer, stackId) VALUES (@Question, @Answer, @StackId)";
 
             connection.Open();
-
             connection.Execute(insertCommand, new { Question = question, Answer = answer, StackId = stackId });
-
             connection.Close();
         }
 
