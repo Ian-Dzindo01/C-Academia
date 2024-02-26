@@ -11,6 +11,7 @@
     <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0-preview.1.24081.2" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.0-preview.1.24081.2" />
+    <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.32" />
     <PackageReference Include="SqlConnection" Version="1.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

@@ -44,7 +44,7 @@ class Stack(string name)
             }
         }
 
-        Console.WriteLine("Stack data read in successfully. Moving back to Main Page. \n");
+        Console.WriteLine("Stack data read in successfully. \n");
         // InputHelper.GetUserInput();
     }
     public static void Add()
@@ -121,7 +121,7 @@ class Stack(string name)
                 Console.WriteLine($"Entry with ID {id} was updated.\n");
 
                 connection.Close();
-                }
+                }   
                 InputHelper.GetUserInput();
         }
 }

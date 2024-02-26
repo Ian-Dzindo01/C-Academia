@@ -1,11 +1,13 @@
 using System.Configuration;
 using Microsoft.Data.Sqlite;
 using Dapper;
+using Spectre.Console;
 
 namespace Flashcards;
 
 class Session()
-{ 
+{   
+    public DateTime time;
     public int correct = 0;
     public int wrong = 0;
 }
@@ -50,7 +52,7 @@ class Games()
         InputHelper.GetUserInput();
 }
 
-    public static void Game(List<dynamic> result, int stackId)
+    private static void Game(List<dynamic> result, int stackId)
     {
         string response;
         Session session = new Session();
@@ -76,18 +78,44 @@ class Games()
             }
         }
 
+            session.time = DateTime.Now;
+            Console.WriteLine(DateTime.Now);
+
             Console.WriteLine($"You had {session.correct} correct answers and {session.wrong} wrong answers.");
             Console.WriteLine("This session will be stored in the database.");
+
+
 
             // 2 connections open at once. Might be a problem.
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
-                string insertCommand = @"INSERT INTO session_table (correct, wrong, stackId) VALUES (@Correct, @Wrong, @StackId)";
+                string insertCommand = @"INSERT INTO session_table (time, correct, wrong, stackId) VALUES (@Time, @Correct, @Wrong, @StackId)";
 
-                connection.Execute(insertCommand, new { Correct = session.correct, Wrong = session.wrong, StackId = stackId });
+                connection.Execute(insertCommand, new { Time = session.time, Correct = session.correct, Wrong = session.wrong, StackId = stackId });
                 connection.Close();
             }
+    }
+
+    public static void ShowSessionTables()
+    {
+        using(var connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+
+            List<Session> tableData = connection.Query<Session>("SELECT * FROM session_table").ToList();
+
+            connection.Close();
+
+            Console.WriteLine("-------------------------------------------\n");
+            foreach (var w in tableData)
+            {                
+                AnsiConsole.MarkupLine($"[bold]Date and Time:[/] {w.time} [bold]Correct Answers:[/] {w.correct} [bold]Wrong Answers:[/] {w.wrong}");
+            }
+            Console.WriteLine("-------------------------------------------\n");
+        }
+
+        InputHelper.GetUserInput();
     }
 }

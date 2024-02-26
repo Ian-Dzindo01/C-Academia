@@ -1,4 +1,3 @@
 - Migrate to SQL Server.
-- Refactor Session.cs 
 - Use DTO's
 - Implement ShowStudySessions

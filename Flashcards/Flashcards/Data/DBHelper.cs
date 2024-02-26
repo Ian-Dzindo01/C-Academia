@@ -30,6 +30,7 @@ class Initializer
             
             CREATE TABLE IF NOT EXISTS session_table (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                time TEXT,
                 correct INTEGER,
                 wrong INTEGER,
                 stackId INTEGER,

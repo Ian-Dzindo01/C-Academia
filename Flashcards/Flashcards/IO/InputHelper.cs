@@ -25,8 +25,9 @@ class InputHelper
             case "3":
                 Games.GamePrep();
                 break;
-            // case "4":
-            //     break;
+            case "4":
+                Games.ShowSessionTables();
+                break;
             case "5":
                 Stack.ReadInFromCsv(ConfigurationManager.AppSettings["stackCsv"]);
                 Card.ReadInFromCsv(ConfigurationManager.AppSettings["cardCsv"]);
