@@ -11,7 +11,8 @@ class InputHelper
         Console.WriteLine("2: Manage Flashcards");
         Console.WriteLine("3: Study");
         Console.WriteLine("4: View Study Session Data");
-        Console.WriteLine("5: Read Data in from Csv Files");
+        Console.WriteLine("5: View all Flashcards");
+        Console.WriteLine("6: Read Data in from Csv Files");
         string? choice = Console.ReadLine();
 
         switch (choice)
@@ -29,6 +30,9 @@ class InputHelper
                 Games.ShowSessionTables();
                 break;
             case "5":
+                Card.ShowCards();
+                break;
+            case "6":
                 Stack.ReadInFromCsv(ConfigurationManager.AppSettings["stackCsv"]);
                 Card.ReadInFromCsv(ConfigurationManager.AppSettings["cardCsv"]);
                 break;

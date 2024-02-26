@@ -2,15 +2,17 @@ using System.Configuration;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualBasic.FileIO;
+using Spectre.Console;
 
 namespace Flashcards;
 
 class Card(string question, string answer, string stackName)
 {
     static string connectionString = ConfigurationManager.AppSettings["connectionString"];
-    string question = question;
-    string answer = answer;
+    public string question = question;
+    public string answer = answer;
     string stackId = stackName;
+
     public static void ReadInFromCsv(string filePath)
     {
         List<string> questions = new List<string>();
@@ -144,5 +146,21 @@ class Card(string question, string answer, string stackName)
                 }
 
                 InputHelper.GetUserInput();
+        }
+
+        public static void ShowCards()
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string selectQuery = "SELECT question, answer FROM card_table";
+                List<CardDTO> flashcards = connection.Query<CardDTO>(selectQuery).ToList();
+
+                foreach (var flashcard in flashcards)
+                    AnsiConsole.MarkupLine($"[bold]Question:[/] {flashcard.Question} [bold]Answer:[/] {flashcard.Answer}");
+
+                connection.Close();
+            }
         }
 }
