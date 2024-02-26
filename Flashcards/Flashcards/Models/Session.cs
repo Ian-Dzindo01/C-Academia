@@ -16,14 +16,10 @@ class Games()
     double score;
 
     static string connectionString = ConfigurationManager.AppSettings["connectionString"];
-
-
     // Separate this function
-    public static void Game()
+    public static void GamePrep()
     {
         Console.WriteLine("Which language do you want to practice?");
-
-        Random rnd = new Random();
 
         using (var connection = new SqliteConnection(connectionString))
         {
@@ -42,43 +38,56 @@ class Games()
                 Console.WriteLine(name);
             
             string? choice = Console.ReadLine();
-            int intChoice = int.Parse(languages[choice]);
+            int stackChoice = int.Parse(languages[choice]);
 
-            string idquery = @"SELECT question, answer from card_table WHERE stackId = @intChoice"; 
+            string idquery = @"SELECT question, answer from card_table WHERE stackId = @stackChoice"; 
 
-            var result = connection.Query(idquery, new { intChoice }).ToList();
-            string response;
-            Session session = new Session();
+            var result = connection.Query(idquery, new { stackChoice }).ToList();
+            Game(result, stackChoice);
+            connection.Close();
+        }
 
-            for(int i = 1; i <= result.Count; i++)
-            {
-                var obj = result[rnd.Next(1, result.Count)];
+        InputHelper.GetUserInput();
+}
 
-                Console.WriteLine($"{obj.question} translates to: ");
+    public static void Game(List<dynamic> result, int stackId)
+    {
+        string response;
+        Session session = new Session();
+        Random rnd = new Random();
 
-                response = Console.ReadLine();
+        for(int i = 1; i <= result.Count; i++)
+        {
+            var obj = result[rnd.Next(1, result.Count)];
 
-                if (response != obj.answer)
-                {   
-                    session.wrong ++;
-                    Console.WriteLine("Wrong answer");
-                }
-                else
-                {   
-                    session.correct++;
-                    Console.WriteLine("Correct");
-                }
+            Console.WriteLine($"{obj.question} translates to: ");
+
+            response = Console.ReadLine();
+
+            if (response != obj.answer)
+            {   
+                session.wrong ++;
+                Console.WriteLine("Wrong answer");
             }
+            else
+            {   
+                session.correct++;
+                Console.WriteLine("Correct");
+            }
+        }
 
             Console.WriteLine($"You had {session.correct} correct answers and {session.wrong} wrong answers.");
             Console.WriteLine("This session will be stored in the database.");
 
-            string insertCommand = @"INSERT INTO session_table (correct, wrong, stackId) VALUES (@Correct, @Wrong, @StackId)";
+            // 2 connections open at once. Might be a problem.
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
 
-            connection.Execute(insertCommand, new { Correct = session.correct, Wrong = session.wrong, StackId = intChoice });
+                string insertCommand = @"INSERT INTO session_table (correct, wrong, stackId) VALUES (@Correct, @Wrong, @StackId)";
 
-            connection.Close();
-        }
-        InputHelper.GetUserInput();
+                connection.Execute(insertCommand, new { Correct = session.correct, Wrong = session.wrong, StackId = stackId });
+                connection.Close();
+            }
     }
 }

@@ -23,7 +23,7 @@ class InputHelper
                 ManageFlashcards();
                 break;
             case "3":
-                Games.Game();
+                Games.GamePrep();
                 break;
             // case "4":
             //     break;
