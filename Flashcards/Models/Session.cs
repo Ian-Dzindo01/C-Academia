@@ -109,10 +109,9 @@ class Games()
             connection.Close();
 
             Console.WriteLine("-------------------------------------------\n");
-            foreach (var w in tableData)
-            {                
+            foreach (var w in tableData)                
                 AnsiConsole.MarkupLine($"[bold]Date and Time:[/] {w.time} [bold]Correct Answers:[/] {w.correct} [bold]Wrong Answers:[/] {w.wrong}");
-            }
+                
             Console.WriteLine("-------------------------------------------\n");
         }
 
