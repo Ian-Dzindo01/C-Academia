@@ -5,13 +5,13 @@ using Spectre.Console;
 
 namespace CodingTracker 
 {
-    class Controller 
+    public class Controller 
     {
         static string connectionString = ConfigurationManager.AppSettings["connectionString"];
         public static void Insert()
         {   
-            DateTime startTime = InputHelper.GetTimeInput("start");
-            DateTime endTime = InputHelper.GetTimeInput("end");
+            DateTime startTime = Validator.GetTimeInput("start");
+            DateTime endTime = Validator.GetTimeInput("end");
             TimeSpan duration = endTime - startTime;
             string formattedDuration = duration.ToString(@"hh\:mm");
 
@@ -30,7 +30,7 @@ namespace CodingTracker
 
         public static void Delete()
         {
-            int id = InputHelper.GetNumberInput("\nType the ID of the entry you would like to delete: ");
+            int id = Validator.GetNumberInput("\nType the ID of the entry you would like to delete: ");
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -55,7 +55,7 @@ namespace CodingTracker
         {
             Output.GetAllRecords();
 
-            int id = InputHelper.GetNumberInput("\nType the ID of the field you would like to update: ");
+            int id = Validator.GetNumberInput("\nType the ID of the field you would like to update: ");
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -71,8 +71,8 @@ namespace CodingTracker
                     Update();
                 }
 
-                DateTime startTime = InputHelper.GetTimeInput("start");
-                DateTime endTime = InputHelper.GetTimeInput("end");
+                DateTime startTime = Validator.GetTimeInput("start");
+                DateTime endTime = Validator.GetTimeInput("end");
                 TimeSpan duration = endTime - startTime;
                 string formattedDuration = duration.ToString(@"hh\:mm");
 
