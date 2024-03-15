@@ -1,1 +1,1 @@
-A repository for some random projects I made for fun.
+A couple of just for fun projects.
